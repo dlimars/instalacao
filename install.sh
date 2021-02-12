@@ -47,20 +47,19 @@ else
     /usr/pgsql-11/bin/postgresql-11-setup initdb
     systemctl enable postgresql-11
     systemctl start postgresql-11
+    
+    ### LIBERAÇÃO DO POSTGRES PARA ACESSO EXTERNO
+    sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
+    echo "host   all        all    0.0.0.0/0      md5" >> /var/lib/pgsql/11/data/pg_hba.conf
+    systemctl restart postgresql-11
+    
+    ### CONFIGURAÇÃO INICIAL DO POSTGRES, CRIAÇÃO DO BANCO E SCHEMAS
+    echo "create database plataforma;" | sudo -u postgres psql
+    echo "grant all privileges on database plataforma to postgres;" | sudo -u postgres psql
+    echo "\connect plataforma; create schema autoatendimento;" | sudo -u postgres psql
+    echo "create schema autoatendimento;" | sudo -u postgres psql --dbname=plataforma
+    echo "ALTER USER postgres with password 'default';" | sudo -u postgres psql
 fi;
-
-
-### LIBERAÇÃO DO POSTGRES PARA ACESSO EXTERNO
-sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
-echo "host   all        all    0.0.0.0/0      md5" >> /var/lib/pgsql/11/data/pg_hba.conf
-systemctl restart postgresql-11
-
-### CONFIGURAÇÃO INICIAL DO POSTGRES, CRIAÇÃO DO BANCO E SCHEMAS
-echo "create database plataforma;" | sudo -u postgres psql
-echo "grant all privileges on database plataforma to postgres;" | sudo -u postgres psql
-echo "\connect plataforma; create schema autoatendimento;" | sudo -u postgres psql
-echo "create schema autoatendimento;" | sudo -u postgres psql --dbname=plataforma
-echo "ALTER USER postgres with password 'default';" | sudo -u postgres psql
 
 ### CLONE DAS PLATAFORMAS
 echo "Clonando repositório HYDRA"
