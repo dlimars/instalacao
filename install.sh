@@ -11,8 +11,14 @@ function isinstalled {
 ### OBTÉM O IP LOCAL DO SERVIDOR E URL DE API
 IP="$(hostname -i)"
 VERSAO_SO="$(cat /etc/redhat-release)"
-read -p "Informe o domínio público da API ex: ( api.dominio.com.br ) : " API_URL
-read -p "Informe o domínio público da CDN ex: ( cdn.dominio.com.br ) : " CDN_URL
+
+if ![[ -z "$API_URL" ]]; then
+    read -p "Informe o domínio público da API ex: ( api.dominio.com.br ) : " API_URL
+fi;
+
+if ![[ -z "$CDN_URL" ]]; then
+    read -p "Informe o domínio público da CDN ex: ( cdn.dominio.com.br ) : " CDN_URL
+fi;
 
 ### INSTALAR PACOTES NECESSÁRIOS
 if isinstalled "git"; then
