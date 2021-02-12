@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 ### OBTÉM O IP LOCAL DO SERVIDOR E URL DE API
 IP="$(hostname -i)"
