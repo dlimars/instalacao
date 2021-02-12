@@ -21,15 +21,15 @@ else
     echo "Instalando dependências e utilitários"
     sudo yum -y install git wget
     curl https://raw.githubusercontent.com/creationix/nvm/v0.25.0/install.sh | bash
-    nvm install 10.14.1
-    npm install pm2@latest -g
 fi;
 
 ### CONFIGURAR VERSÃO PADRÃO DO NODE
 if [[ $(which npm) ]]; then
     echo "Configurando versão default do node";
+    nvm install 10.14.1;
     nvm alias default v10.14.1;
     nvm use v10.14.1;
+    npm install pm2@latest -g
 fi;
 
 ### INSTALAÇÃO DO DOCKER
@@ -121,15 +121,15 @@ if [[ -d "/opt/bdti/call" ]]; then
 
     if ! [[ -f "/opt/bdti/call/.env" ]]; then
         echo "CONFIGURANDO CALLCENTER"
-        cd "/opt/bdti/call"
-        cp .env-example .env
-        cp .env-example external.env
-        sed -i "s/localhost/$IP/" .env
-        sed -i "s/localhost:7777/$API_URL/" external.env
-        sed -i "s/localhost:8086/$API_URL/" external.env
-        sed -i "s/localhost/$API_URL/" external.env
-        npm install
-        pm2 start server.js --name=call
+        cd "/opt/bdti/call" \
+            && cp .env-example .env \
+            && cp .env-example external.env \
+            && sed -i "s/localhost/$IP/" .env \
+            && sed -i "s/localhost:7777/$API_URL/" external.env \
+            && sed -i "s/localhost:8086/$API_URL/" external.env \
+            && sed -i "s/localhost/$API_URL/" external.env \
+            && npm install \
+            && pm2 start server.js --name=call
     fi;
 
 fi
@@ -138,50 +138,50 @@ fi
 if [[ -d "/opt/bdti/b2b" ]]; then
     if ! [[ -f "/opt/bdti/b2b/.env" ]]; then
         echo "CONFIGURANDO B2B"
-        cd "/opt/bdti/b2b"
-        cp .env-example .env
-        cp .env-example external.env
-        sed -i "s/localhost/$IP/" .env
-        sed -i "s/localhost:7777/$API_URL/" external.env
-        sed -i "s/localhost:8086/$API_URL/" external.env
-        sed -i "s/localhost/$API_URL/" external.env
-        npm install
-        pm2 start server.js --name=b2b
+        cd "/opt/bdti/b2b" \
+            && cp .env-example .env \
+            && cp .env-example external.env \
+            && sed -i "s/localhost/$IP/" .env \
+            && sed -i "s/localhost:7777/$API_URL/" external.env \
+            && sed -i "s/localhost:8086/$API_URL/" external.env \
+            && sed -i "s/localhost/$API_URL/" external.env \
+            && npm install \
+            && pm2 start server.js --name=b2b
     fi;
 fi
 
 ## CONFIGURAÇÃO DO ADM
 if ! [[ -f "/opt/bdti/adm/.env" ]]; then
     echo "CONFIGURANDO PAINEL ADM"
-    cd "/opt/bdti/adm"
-    cp .env-example .env
-    cp .env-example external.env
-    sed -i "s/localhost/$IP/" .env
-    sed -i "s/localhost:7777/$API_URL/" external.env
-    sed -i "s/localhost:8086/$API_URL/" external.env
-    sed -i "s/localhost/$API_URL/" external.env
-    npm install
-    pm2 start server.js --name=adm
+    cd "/opt/bdti/adm" \
+        && cp .env-example .env \
+        && cp .env-example external.env \
+        && sed -i "s/localhost/$IP/" .env \
+        && sed -i "s/localhost:7777/$API_URL/" external.env \
+        && sed -i "s/localhost:8086/$API_URL/" external.env \
+        && sed -i "s/localhost/$API_URL/" external.env \
+        && npm install \
+        && pm2 start server.js --name=adm\
 fi;
 
 ### CONFIGURAÇÃO DA CDN
 if ! [[ -f "/opt/bdti/cdn/.env" ]]; then
     echo "CONFIGURANDO CDN"
-    cd "/opt/bdti/cdn"
-    cp .env-example .env
-    npm install
-    pm2 start src/index.js --name=cdn
+    cd "/opt/bdti/cdn" \
+        && cp .env-example .env \
+        && npm install \
+        && pm2 start src/index.js --name=cdn
 fi;
 
 ### CONFIGURAÇÃO DO BACKEND E CONTAINERS
 if ! [[ -f "/opt/bdti/hydra/.env" ]]; then
     echo "CONFIGURANDO APIS BACKEND"
-    cd "/opt/bdti/hydra"
-    cp .env-example .env
-    sed -i "s/localhost/$API_URL/" .env
-    cd "/opt/bdti/hydra/laradock"
-    cp env-example .env
-    sed -i "s/localhost/$IP/" .env
+    cd "/opt/bdti/hydra" \
+        && cp .env-example .env \
+        && sed -i "s/localhost/$API_URL/" .env \
+        && cd "/opt/bdti/hydra/laradock" \
+        && cp env-example .env \
+        && sed -i "s/localhost/$IP/" .env
 fi;
 
 echo "Adicionando entradas no iptables e firewall";
