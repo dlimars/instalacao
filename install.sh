@@ -10,4 +10,4 @@ systemctl start postgresql-11
 
 ### LIBERAÇÃO DO POSTGRES PARA ACESSO EXTERNO
 sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
-echo "host   all        all    0.0.0.0/0      md5" >> sudo vi /var/lib/pgsql/11/data/pg_hba.conf
+echo "host   all        all    0.0.0.0/0      md5" >> /var/lib/pgsql/11/data/pg_hba.conf
